@@ -93,85 +93,85 @@ function MovieCard({ label, imgSrc }: { label: string; imgSrc: string }) {
 }
 
 // ── 3D Book card ───────────────────────────────────────────────────────────
+// Key insight: NO overflow:hidden anywhere in the chain — it flattens CSS 3D transforms.
+// We clip at the page level using overflow-x:clip on body instead.
 function Book3DCard({ label, imgSrc }: { label: string; imgSrc: string }) {
   return (
-    <div className="relative flex-shrink-0" style={{ width: 86, height: 126 }}>
-      {/* Pages / spine shadow behind the cover */}
-      <div
-        style={{
+    <div
+      className="book-item"
+      style={{ position: 'relative', cursor: 'pointer', padding: '4px 2px', margin: 0, display: 'grid', flexShrink: 0 }}
+    >
+      <div style={{ position: 'relative' }}>
+        {/* Pages behind cover */}
+        <div style={{
           position: 'absolute',
-          width: '88%',
+          width: '90%',
           height: '96%',
-          top: '2%',
-          left: 12,
-          border: '1px solid #bbb',
+          top: '1%',
+          left: 10,
+          border: '1px solid grey',
           borderRadius: '2px 6px 6px 2px',
           background: 'white',
-          boxShadow:
-            '10px 40px 40px -10px #00000030, inset -2px 0 0 grey, inset -3px 0 0 #dbdbdb, inset -4px 0 0 white, inset -5px 0 0 #dbdbdb, inset -6px 0 0 white, inset -7px 0 0 #dbdbdb, inset -8px 0 0 white, inset -9px 0 0 #dbdbdb',
-        }}
-      />
-      {/* Cover with 3D perspective tilt */}
-      <div
-        className="book-3d-cover"
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          borderRadius: '2px 5px 5px 2px',
-          overflow: 'hidden',
-          boxShadow: '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)',
-          transform: 'perspective(2000px) rotateY(-18deg) translateX(-10px) scaleX(0.93)',
-          transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
-          cursor: 'pointer',
-        }}
-        onMouseEnter={e => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.transform = 'perspective(2000px) rotateY(0deg) translateX(0px) scaleX(1)';
-          el.style.boxShadow = '6px 6px 12px -1px rgba(0,0,0,0.1), 20px 14px 16px -6px rgba(0,0,0,0.1)';
-        }}
-        onMouseLeave={e => {
-          const el = e.currentTarget as HTMLElement;
-          el.style.transform = 'perspective(2000px) rotateY(-18deg) translateX(-10px) scaleX(0.93)';
-          el.style.boxShadow = '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)';
-        }}
-      >
-        <img
-          src={imgSrc}
-          alt=""
-          className="h-full w-full object-cover"
-          loading="lazy"
-          onError={e => {
-            const img = e.target as HTMLImageElement;
-            img.style.display = 'none';
-            if (img.parentElement) img.parentElement.style.background = '#2d1b69';
+          boxShadow: '10px 40px 40px -10px #00000030, inset -2px 0 0 grey, inset -3px 0 0 #dbdbdb, inset -4px 0 0 white, inset -5px 0 0 #dbdbdb, inset -6px 0 0 white, inset -7px 0 0 #dbdbdb, inset -8px 0 0 white, inset -9px 0 0 #dbdbdb',
+        }} />
+        {/* Cover */}
+        <div
+          className="book-cover-3d"
+          style={{
+            lineHeight: 0,
+            position: 'relative',
+            borderRadius: '2px 6px 6px 2px',
+            boxShadow: '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease-in-out',
+            transform: 'perspective(2000px) rotateY(-15deg) translateX(-10px) scaleX(0.94)',
+            cursor: 'pointer',
+            width: 72,
+            height: 108,
           }}
-        />
-        {/* Spine light effect */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0,
-          width: 20, height: '100%',
-          marginLeft: 16,
-          borderLeft: '2px solid rgba(0,0,0,0.08)',
-          background: 'linear-gradient(90deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 100%)',
-          zIndex: 5,
-          transition: 'all 0.5s ease',
-        }} />
-        {/* Sheen */}
-        <div style={{
-          position: 'absolute', top: 0, right: 0,
-          width: '85%', height: '100%',
-          background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 100%)',
-          opacity: 0.12, zIndex: 4,
-        }} />
-        {/* Label */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.82), transparent)',
-          padding: '12px 4px 4px',
-          zIndex: 6,
-        }}>
-          <p style={{ fontSize: 8, fontWeight: 700, color: 'white', lineHeight: 1.2 }}>{label}</p>
+          onMouseEnter={e => {
+            const el = e.currentTarget as HTMLElement;
+            el.style.transform = 'perspective(2000px) rotateY(0deg) translateX(0px) scaleX(1)';
+            el.style.boxShadow = '6px 6px 12px -1px rgba(0,0,0,0.1), 20px 14px 16px -6px rgba(0,0,0,0.1)';
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget as HTMLElement;
+            el.style.transform = 'perspective(2000px) rotateY(-15deg) translateX(-10px) scaleX(0.94)';
+            el.style.boxShadow = '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)';
+          }}
+        >
+          <img
+            src={imgSrc}
+            alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '2px 6px 6px 2px', display: 'block' }}
+            loading="lazy"
+            onError={e => {
+              const img = e.target as HTMLImageElement;
+              img.style.background = '#2d1b69';
+            }}
+          />
+          {/* Spine shimmer */}
+          <div style={{
+            position: 'absolute', top: 0, left: 0, width: 20, height: '100%',
+            marginLeft: 16,
+            borderLeft: '2px solid rgba(0,0,0,0.10)',
+            backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%)',
+            transition: 'all 0.5s ease', zIndex: 5,
+          }} />
+          {/* Sheen */}
+          <div style={{
+            width: '90%', height: '100%', position: 'absolute',
+            borderRadius: 3, top: 0, right: 0,
+            backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 100%)',
+            opacity: 0.1, zIndex: 4,
+          }} />
+          {/* Label */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)',
+            padding: '14px 5px 5px', zIndex: 6,
+          }}>
+            <p style={{ fontSize: 8, fontWeight: 700, color: 'white', lineHeight: 1.2, margin: 0 }}>{label}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -187,7 +187,7 @@ function ScrollColumn({
 }) {
   const items = [...labels, ...labels];
   return (
-    <div style={{ overflow: 'hidden', height: '100%' }}>
+    <div style={{ height: '100%' }}>
       <div style={{
         display: 'flex', flexDirection: 'column', gap: 8,
         animation: `scrollV${reverse ? 'Rev' : ''} ${duration}s linear infinite`,
@@ -214,11 +214,10 @@ export default function Home() {
     { labels: BOOK_LABELS.slice(0, 7), images: BOOK_COVERS.slice(0, 7), dur: 24 },
     { labels: BOOK_LABELS.slice(7, 14), images: BOOK_COVERS.slice(7, 14), dur: 30, rev: true },
     { labels: BOOK_LABELS.slice(0, 7), images: BOOK_COVERS.slice(14, 21), dur: 26 },
-    { labels: BOOK_LABELS.slice(7, 14), images: BOOK_COVERS.slice(0, 7), dur: 35, rev: true },
   ];
 
   return (
-    <div className="min-h-screen overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #f5d0fe 0%, #e0d7ff 25%, #bfdbfe 55%, #fde8d8 80%, #fef3c7 100%)' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #f5d0fe 0%, #e0d7ff 25%, #bfdbfe 55%, #fde8d8 80%, #fef3c7 100%)' }}>
 
       <style>{`
         @keyframes scrollV {
@@ -229,6 +228,7 @@ export default function Home() {
           0%   { transform: translateY(-50%); }
           100% { transform: translateY(0); }
         }
+        body { overflow-x: hidden; }
       `}</style>
 
       {/* Header */}
@@ -238,9 +238,9 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="relative" style={{ minHeight: 560 }}>
+      <section className="relative" style={{ minHeight: 560, overflowY: 'hidden' }}>
         {/* Left — movies */}
-        <div className="absolute left-0 top-0 bottom-0 flex gap-2 px-2 overflow-hidden"
+        <div className="absolute left-0 top-0 bottom-0 flex gap-2 px-2"
           style={{ width: 'clamp(160px, 28vw, 320px)', zIndex: 1 }}>
           {leftCols.map((col, i) => (
             <ScrollColumn key={i} labels={col.labels} images={col.images} duration={col.dur} reverse={col.rev} />
@@ -248,8 +248,9 @@ export default function Home() {
         </div>
 
         {/* Right — 3D books */}
-        <div className="absolute right-0 top-0 bottom-0 flex gap-2 px-2 overflow-hidden"
-          style={{ width: 'clamp(160px, 28vw, 320px)', zIndex: 1 }}>
+        <div
+          className="absolute right-0 top-0 bottom-0 flex"
+          style={{ width: 'clamp(160px, 26vw, 290px)', zIndex: 1, gap: 0 }}>
           {rightCols.map((col, i) => (
             <ScrollColumn key={i} labels={col.labels} images={col.images} isBook duration={col.dur} reverse={col.rev} />
           ))}
