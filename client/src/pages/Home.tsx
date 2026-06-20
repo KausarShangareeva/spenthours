@@ -336,8 +336,8 @@ export default function Home() {
             <span className="logo-wordmark" style={{ fontSize: 17 }}>Spent<em>Hours</em></span>
           </div>
 
-          <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(20px, 3.5vw, 54px)', fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px', whiteSpace: 'nowrap' }}>
-            What Could Your Movie Hours <em style={{ fontStyle: 'italic', color: '#7c3aed' }}>Become?</em>
+          <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(28px, 4.2vw, 60px)', fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px' }}>
+            What Could Your Movie<br />Hours <em style={{ fontStyle: 'italic', color: '#7c3aed' }}>Become?</em>
           </h1>
 
           <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, fontWeight: 400, lineHeight: 1.65, color: '#5b4a7a', margin: '0 0 36px', maxWidth: 420 }}>
