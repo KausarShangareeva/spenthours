@@ -96,7 +96,7 @@ function MovieCard({ label, imgSrc, fallbacks = [] }: { label: string; imgSrc: s
   };
   return (
     <div style={{
-      position: 'relative', flexShrink: 0, width: 80, height: 120,
+      position: 'relative', flexShrink: 0, width: 100, height: 150,
       borderRadius: 10, overflow: 'hidden', background: '#1a1a2e',
       boxShadow: '0 4px 16px rgba(0,0,0,0.35)',
     }}>
@@ -133,7 +133,7 @@ function Book3DCard({ label, imgSrc }: { label: string; imgSrc: string }) {
             boxShadow: '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)',
             transition: 'all 0.3s ease-in-out',
             transform: 'perspective(2000px) rotateY(-15deg) translateX(-10px) scaleX(0.94)',
-            cursor: 'pointer', width: 72, height: 108,
+            cursor: 'pointer', width: 90, height: 135,
           }}
           onMouseEnter={e => {
             const el = e.currentTarget as HTMLElement;
@@ -304,14 +304,14 @@ export default function Home() {
       </div>
 
       {/* ── HERO ────────────────────────────────────────────────────────── */}
-      <section className="hero-section" style={{ position: 'relative', minHeight: 620, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <section className="hero-section" style={{ position: 'relative', minHeight: 775, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse 55% 65% at 50% 50%, rgba(255,255,255,0.72) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Left — movies */}
         <div className="hero-cols-left fade-left fade-top-bottom" style={{
           position: 'absolute', left: 0, top: 0, bottom: 0,
           display: 'flex', gap: 10, paddingLeft: 8,
-          width: 'clamp(180px, 26vw, 300px)', zIndex: 1,
+          width: 'clamp(200px, 28vw, 360px)', zIndex: 1,
         }}>
           {leftCols.map((col, i) => (
             <ScrollColumn key={i} labels={col.labels} images={col.images} duration={col.dur} reverse={col.rev} />
@@ -322,7 +322,7 @@ export default function Home() {
         <div className="hero-cols-right fade-right fade-top-bottom" style={{
           position: 'absolute', right: 0, top: 0, bottom: 0,
           display: 'flex', gap: 0,
-          width: 'clamp(180px, 26vw, 300px)', zIndex: 1,
+          width: 'clamp(200px, 28vw, 360px)', zIndex: 1,
         }}>
           {rightCols.map((col, i) => (
             <ScrollColumn key={i} labels={col.labels} images={col.images} isBook duration={col.dur} reverse={col.rev} />
@@ -330,7 +330,7 @@ export default function Home() {
         </div>
 
         {/* Center */}
-        <div className="hero-center" style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', maxWidth: 560, padding: '0 24px' }}>
+        <div className="hero-center" style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', maxWidth: 620, padding: '40px 24px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', borderRadius: 100, padding: '6px 18px 6px 8px', marginBottom: 28, boxShadow: '0 2px 12px rgba(124,58,237,0.1)' }}>
             <Logo size={24} />
             <span className="logo-wordmark" style={{ fontSize: 17 }}>Spent<em>Hours</em></span>
