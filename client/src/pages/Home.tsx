@@ -330,26 +330,26 @@ export default function Home() {
             <span className="logo-wordmark" style={{ fontSize: 17 }}>Spent<em>Hours</em></span>
           </div>
 
-          <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(38px, 5.5vw, 68px)', fontWeight: 400, lineHeight: 1.08, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px' }}>
-            See the true cost<br />
-            <em style={{ fontStyle: 'italic', color: '#7c3aed' }}>of your screen time</em>
+          <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(34px, 5vw, 64px)', fontWeight: 400, lineHeight: 1.08, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px' }}>
+            What Could Your Movie Hours<br />
+            <em style={{ fontStyle: 'italic', color: '#7c3aed' }}>Become?</em>
           </h1>
 
-          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, fontWeight: 400, lineHeight: 1.65, color: '#5b4a7a', margin: '0 0 36px', maxWidth: 400 }}>
-            Mark watched titles in one click. SpentHours shows what those hours could have become — books read, skills learned, life gained back.
+          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, fontWeight: 400, lineHeight: 1.65, color: '#5b4a7a', margin: '0 0 36px', maxWidth: 420 }}>
+            Отмечайте просмотренные фильмы и сериалы в один клик. Узнайте, сколько книг вы могли бы прочесть и каким дисциплинам обучиться, если бы инвестировали это время в себя.
           </p>
 
           <Link to="/app">
             <button className="hero-cta">
-              Start analyzing
+              See what I could achieve
               <span className="hero-cta-arrow"><ArrowRight size={16} /></span>
             </button>
           </Link>
 
           <div className="hero-pills" style={{ display: 'flex', gap: 10, marginTop: 28, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <div className="stat-pill"><span className="stat-pill-dot" style={{ background: '#a78bfa' }} />150+ titles in catalog</div>
-            <div className="stat-pill"><span className="stat-pill-dot" style={{ background: '#34d399' }} />Saves to your browser</div>
-            <div className="stat-pill"><span className="stat-pill-dot" style={{ background: '#fb923c' }} />Takes 30 seconds</div>
+            <div className="stat-pill">🎬 1,000+ movies &amp; shows</div>
+            <div className="stat-pill">🔒 No sign-up required</div>
+            <div className="stat-pill">⚡ Fills in under 30 seconds</div>
           </div>
         </div>
       </section>
