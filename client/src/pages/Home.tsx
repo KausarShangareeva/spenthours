@@ -4,11 +4,8 @@ import { Link } from 'wouter';
 import { Linkedin, Github, Mail, ArrowRight } from 'lucide-react';
 import { ProfileModal } from '@/components/ProfileModal';
 
-// ── Book covers via Open Library numeric cover IDs (verified via API) ────
-const C = (id: string) => `https://covers.openlibrary.org/b/id/${id}-M.jpg`;
-// All IDs verified: 13290711=ThinkingFastSlow, 12539702=AtomicHabits, 8315603=RichDad,
-// 7414780=Alchemist, 10021591=Outliers, 10873292=TippingPoint, 8516506=ManSearchMeaning,
-// 6404786=Drive, 7438753=Grit, 8739161=ThinkingFast(alt), 10521270=Blink, 8775116=HowToWin
+// ── Book covers — Open Library large format (reliable IDs) ────
+const C = (id: string) => `https://covers.openlibrary.org/b/id/${id}-L.jpg`;
 const BOOK_COVERS = [
   C('13290711'),  // Thinking Fast and Slow
   C('12539702'),  // Atomic Habits
@@ -22,6 +19,15 @@ const BOOK_COVERS = [
   C('8739161'),   // Thinking Fast and Slow v2
   C('10521270'),  // Blink
   C('8775116'),   // How to Win Friends
+  // Extra covers with TMDB as reliable fallback
+  'https://image.tmdb.org/t/p/w200/uXDfjJbdP4ijW5hWSBrPl9KcertP.jpg',
+  'https://image.tmdb.org/t/p/w200/vpnVM9B6NMmQpWeZvzLvDESb2QY.jpg',
+  'https://image.tmdb.org/t/p/w200/hbhFnRzzg6ZDmm8YAmxBnQpQIPh.jpg',
+  'https://image.tmdb.org/t/p/w200/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg',
+  'https://image.tmdb.org/t/p/w200/2H1TmgdfNtsKlU9jKdeNyYL5y8T.jpg',
+  'https://image.tmdb.org/t/p/w200/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg',
+  'https://image.tmdb.org/t/p/w200/kgwjIb2JDHRhNk13lmSxiClFjVk.jpg',
+  'https://image.tmdb.org/t/p/w200/inVq3FRqcYIRl2la8iZikYYxFNR.jpg',
 ];
 
 // ── Movie posters ─────────────────────────────────────────────────────────
@@ -152,15 +158,22 @@ function Book3DCard({ label, imgSrc }: { label: string; imgSrc: string }) {
             loading="lazy"
             onError={e => {
               const img = e.target as HTMLImageElement;
-              // Try next book cover from the pool as fallback
+              const tried = img.dataset.tried ? parseInt(img.dataset.tried) : 0;
               const allCovers = BOOK_COVERS;
-              const currentIdx = allCovers.indexOf(img.src);
-              const nextIdx = (currentIdx + 1) % allCovers.length;
+              const currentIdx = allCovers.findIndex(u => u === img.src);
+              const nextIdx = (currentIdx + 1 + tried) % allCovers.length;
               const nextSrc = allCovers[nextIdx];
-              if (nextSrc && nextSrc !== img.src) {
+              if (tried < 5 && nextSrc && nextSrc !== img.src) {
+                img.dataset.tried = String(tried + 1);
                 img.src = nextSrc;
               } else {
-                img.style.opacity = '0';
+                // Show coloured placeholder instead of blank
+                img.style.display = 'none';
+                const parent = img.parentElement;
+                if (parent) {
+                  const colors = ['#d4c5f9','#c8f5d0','#bfdbfe','#fde68a','#fce7f3','#fed7aa'];
+                  parent.style.background = colors[Math.floor(Math.random() * colors.length)];
+                }
               }
             }}
           />
@@ -304,14 +317,14 @@ export default function Home() {
       </div>
 
       {/* ── HERO ────────────────────────────────────────────────────────── */}
-      <section className="hero-section" style={{ position: 'relative', minHeight: 775, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <section className="hero-section" style={{ position: 'relative', minHeight: 775, display: 'flex', alignItems: 'center', justifyContent: 'center', overflowY: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse 55% 65% at 50% 50%, rgba(255,255,255,0.72) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Left — movies */}
         <div className="hero-cols-left fade-left fade-top-bottom" style={{
           position: 'absolute', left: 0, top: 0, bottom: 0,
-          display: 'flex', gap: 10, paddingLeft: 8,
-          width: 'clamp(200px, 28vw, 360px)', zIndex: 1,
+          display: 'flex', gap: 8, paddingLeft: 12, paddingRight: 12,
+          width: 'clamp(180px, 26vw, 330px)', zIndex: 1, overflow: 'hidden',
         }}>
           {leftCols.map((col, i) => (
             <ScrollColumn key={i} labels={col.labels} images={col.images} duration={col.dur} reverse={col.rev} />
@@ -321,8 +334,8 @@ export default function Home() {
         {/* Right — 3D books */}
         <div className="hero-cols-right fade-right fade-top-bottom" style={{
           position: 'absolute', right: 0, top: 0, bottom: 0,
-          display: 'flex', gap: 0,
-          width: 'clamp(200px, 28vw, 360px)', zIndex: 1,
+          display: 'flex', gap: 4, paddingLeft: 8, paddingRight: 12,
+          width: 'clamp(180px, 26vw, 330px)', zIndex: 1, overflow: 'hidden',
         }}>
           {rightCols.map((col, i) => (
             <ScrollColumn key={i} labels={col.labels} images={col.images} isBook duration={col.dur} reverse={col.rev} />

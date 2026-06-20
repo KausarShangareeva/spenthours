@@ -177,9 +177,27 @@ function MovieCard({ movie, watched, onClick }: { movie: Movie; watched: boolean
       {/* Poster */}
       <div style={{ position: 'relative', aspectRatio: '2/3', width: '100%', overflow: 'hidden' }}>
         {poster ? (
-          <img src={poster} alt={movie.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} loading="lazy" />
+          <img
+            src={poster}
+            alt={movie.title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            loading="lazy"
+            onError={e => {
+              const img = e.target as HTMLImageElement;
+              img.style.display = 'none';
+              const parent = img.parentElement;
+              if (parent) {
+                parent.style.background = 'linear-gradient(135deg, #d4c5f9, #c0e8ff)';
+                parent.style.display = 'flex';
+                parent.style.alignItems = 'center';
+                parent.style.justifyContent = 'center';
+                parent.style.fontSize = '32px';
+                parent.textContent = movie.emoji;
+              }
+            }}
+          />
         ) : (
-          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #d4c5f9, #c0e8ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>
+          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #d4c5f9, #c0e8ff)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>
             {movie.emoji}
           </div>
         )}
