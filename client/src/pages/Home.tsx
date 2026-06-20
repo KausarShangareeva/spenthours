@@ -86,7 +86,12 @@ const BOOK_LABELS = [
 const AVATAR_URL = '/manus-storage/Gemini_Generated_Image_wtfvk4wtfvk4wtfv(2)_6812a2cf.png';
 
 // ── Movie card ─────────────────────────────────────────────────────────────
-function MovieCard({ label, imgSrc }: { label: string; imgSrc: string }) {
+function MovieCard({ label, imgSrc, fallbacks = [] }: { label: string; imgSrc: string; fallbacks?: string[] }) {
+  const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.target as HTMLImageElement;
+    const next = fallbacks.shift();
+    if (next) { img.src = next; } else { img.style.opacity = '0'; }
+  };
   return (
     <div style={{
       position: 'relative', flexShrink: 0, width: 80, height: 120,
@@ -97,7 +102,7 @@ function MovieCard({ label, imgSrc }: { label: string; imgSrc: string }) {
         src={imgSrc} alt=""
         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         loading="lazy"
-        onError={e => { (e.target as HTMLImageElement).style.opacity = '0'; }}
+        onError={handleError}
       />
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0,
@@ -145,8 +150,16 @@ function Book3DCard({ label, imgSrc }: { label: string; imgSrc: string }) {
             loading="lazy"
             onError={e => {
               const img = e.target as HTMLImageElement;
-              img.style.background = '#2d1b69';
-              img.style.opacity = '0';
+              // Try next book cover from the pool as fallback
+              const allCovers = BOOK_COVERS;
+              const currentIdx = allCovers.indexOf(img.src);
+              const nextIdx = (currentIdx + 1) % allCovers.length;
+              const nextSrc = allCovers[nextIdx];
+              if (nextSrc && nextSrc !== img.src) {
+                img.src = nextSrc;
+              } else {
+                img.style.opacity = '0';
+              }
             }}
           />
           <div style={{ position: 'absolute', top: 0, left: 0, width: 20, height: '100%', marginLeft: 16, borderLeft: '2px solid rgba(0,0,0,0.10)', backgroundImage: 'linear-gradient(90deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%)', zIndex: 5 }} />
@@ -253,7 +266,7 @@ export default function Home() {
           .hero-cols-left, .hero-cols-right { display: none !important; }
           .hero-section { min-height: auto !important; padding: 0 !important; }
           .hero-center { padding: 28px 20px 28px !important; }
-          .hero-h1 { font-size: 38px !important; }
+          .hero-h1 { font-size: 28px !important; white-space: normal !important; }
           .hero-pills { gap: 8px !important; }
           .stat-pill { font-size: 11px !important; padding: 5px 10px 5px 6px !important; }
           .section-grid-3 { grid-template-columns: 1fr !important; }
@@ -274,17 +287,7 @@ export default function Home() {
         }
       `}</style>
 
-      {/* ── NAV ─────────────────────────────────────────────────────────── */}
-      <nav className="nav-wrap" style={{
-        position: 'relative', zIndex: 20,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '20px 40px', maxWidth: 1280, margin: '0 auto',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <Logo size={32} />
-          <span className="logo-wordmark">Spent<em>Hours</em></span>
-        </div>
-      </nav>
+
 
       {/* Mobile TOP scroll row — movies (above headline) */}
       <div className="mobile-scroll-row" style={{ overflow: 'hidden', padding: '0 0 16px' }}>
@@ -330,9 +333,8 @@ export default function Home() {
             <span className="logo-wordmark" style={{ fontSize: 17 }}>Spent<em>Hours</em></span>
           </div>
 
-          <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(34px, 5vw, 64px)', fontWeight: 400, lineHeight: 1.08, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px' }}>
-            What Could Your Movie Hours<br />
-            <em style={{ fontStyle: 'italic', color: '#7c3aed' }}>Become?</em>
+          <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(20px, 3.5vw, 54px)', fontWeight: 400, lineHeight: 1.1, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px', whiteSpace: 'nowrap' }}>
+            What Could Your Movie Hours <em style={{ fontStyle: 'italic', color: '#7c3aed' }}>Become?</em>
           </h1>
 
           <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 16, fontWeight: 400, lineHeight: 1.65, color: '#5b4a7a', margin: '0 0 36px', maxWidth: 420 }}>
