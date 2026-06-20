@@ -411,17 +411,19 @@ export default function Home() {
       {/* ── STATS ─────────────────────────────────────────────────────────── */}
       <section style={{ padding: '80px 24px', background: 'rgba(196,181,253,0.2)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(28px, 4vw, 44px)', textAlign: 'center', color: '#1a0a2e', margin: '0 0 48px', fontWeight: 400 }}>What 200 movies actually costs</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20 }}>
+          <p style={{ textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#7c3aed', textTransform: 'uppercase', marginBottom: 12 }}>The real math</p>
+          <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(28px, 4vw, 44px)', textAlign: 'center', color: '#1a0a2e', margin: '0 0 8px', fontWeight: 400 }}>What 200 movies actually costs</h2>
+          <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: 48, fontSize: 14 }}>The hours are real. So is the alternative.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
             {[
-              { value: '200', label: 'MOVIES WATCHED', sub: '≈ 18 full days of life' },
-              { value: '12', label: 'BOOKS UNREAD', sub: 'the same hours, redirected' },
-              { value: '0', label: 'ACCOUNTS NEEDED', sub: 'saved locally in your browser' },
+              { value: '200', label: 'Movies watched', sub: '≈ 18 full days of life', color: '#7c3aed' },
+              { value: '12', label: 'Books unread', sub: 'the same hours, redirected', color: '#059669' },
+              { value: '0', label: 'Accounts needed', sub: 'saved locally in your browser', color: '#ea580c' },
             ].map(stat => (
-              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '36px 24px', textAlign: 'center', border: '1px solid rgba(255,255,255,0.9)' }}>
-                <div style={{ fontFamily: "'Odibee Sans', sans-serif", fontSize: 64, fontWeight: 900, color: '#1a0a2e', lineHeight: 1 }}>{stat.value}</div>
-                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: '0.14em', color: '#9ca3af', marginTop: 10, textTransform: 'uppercase' }}>{stat.label}</div>
-                <div style={{ fontSize: 13, color: '#6b7280', marginTop: 6 }}>{stat.sub}</div>
+              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '28px 24px', border: '1px solid rgba(255,255,255,0.9)' }}>
+                <div style={{ fontFamily: "'Odibee Sans', sans-serif", fontSize: 56, fontWeight: 900, color: stat.color, lineHeight: 1 }}>{stat.value}</div>
+                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 18, color: '#1a0a2e', marginTop: 10, fontWeight: 400 }}>{stat.label}</div>
+                <div style={{ fontSize: 13, color: '#6b7280', marginTop: 4 }}>{stat.sub}</div>
               </div>
             ))}
           </div>
