@@ -34,7 +34,7 @@ const MOVIE_POSTERS = [
   'https://image.tmdb.org/t/p/w200/reEMJA1uzscCbkpeRJeTT2bjqUp.jpg',
 ];
 
-// Book cover images (real Thinking Fast and Slow, Atomic Habits, etc.)
+// Book covers (real books)
 const BOOK_COVERS = [
   'https://covers.openlibrary.org/b/isbn/0374533555-M.jpg',
   'https://covers.openlibrary.org/b/isbn/0735224293-M.jpg',
@@ -74,18 +74,10 @@ const BOOK_LABELS = [
   '8h read', '8h read', '8h read', '9h read', '6h read', '10h read',
 ];
 
-interface CardProps {
-  label: string;
-  imgSrc: string;
-  dark?: boolean;
-}
-
-function Card({ label, imgSrc, dark }: CardProps) {
+// ── Movie card (flat dark poster) ──────────────────────────────────────────
+function MovieCard({ label, imgSrc }: { label: string; imgSrc: string }) {
   return (
-    <div
-      className="relative flex-shrink-0 overflow-hidden rounded-xl"
-      style={{ width: 72, height: 108, background: dark ? '#1a1a2e' : '#111' }}
-    >
+    <div className="relative flex-shrink-0 overflow-hidden rounded-xl" style={{ width: 72, height: 108, background: '#111' }}>
       <img
         src={imgSrc}
         alt=""
@@ -100,44 +92,117 @@ function Card({ label, imgSrc, dark }: CardProps) {
   );
 }
 
-function ScrollColumn({
-  labels,
-  images,
-  dark,
-  duration = 28,
-  reverse = false,
-}: {
-  labels: string[];
-  images: string[];
-  dark?: boolean;
-  duration?: number;
-  reverse?: boolean;
-}) {
-  // Duplicate for seamless loop
-  const items = [...labels, ...labels];
+// ── 3D Book card ───────────────────────────────────────────────────────────
+function Book3DCard({ label, imgSrc }: { label: string; imgSrc: string }) {
   return (
-    <div className="overflow-hidden" style={{ height: '100%' }}>
+    <div className="relative flex-shrink-0" style={{ width: 86, height: 126 }}>
+      {/* Pages / spine shadow behind the cover */}
       <div
         style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 8,
-          animation: `scrollVertical${reverse ? 'Rev' : ''} ${duration}s linear infinite`,
+          position: 'absolute',
+          width: '88%',
+          height: '96%',
+          top: '2%',
+          left: 12,
+          border: '1px solid #bbb',
+          borderRadius: '2px 6px 6px 2px',
+          background: 'white',
+          boxShadow:
+            '10px 40px 40px -10px #00000030, inset -2px 0 0 grey, inset -3px 0 0 #dbdbdb, inset -4px 0 0 white, inset -5px 0 0 #dbdbdb, inset -6px 0 0 white, inset -7px 0 0 #dbdbdb, inset -8px 0 0 white, inset -9px 0 0 #dbdbdb',
+        }}
+      />
+      {/* Cover with 3D perspective tilt */}
+      <div
+        className="book-3d-cover"
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          borderRadius: '2px 5px 5px 2px',
+          overflow: 'hidden',
+          boxShadow: '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)',
+          transform: 'perspective(2000px) rotateY(-18deg) translateX(-10px) scaleX(0.93)',
+          transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+          cursor: 'pointer',
+        }}
+        onMouseEnter={e => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.transform = 'perspective(2000px) rotateY(0deg) translateX(0px) scaleX(1)';
+          el.style.boxShadow = '6px 6px 12px -1px rgba(0,0,0,0.1), 20px 14px 16px -6px rgba(0,0,0,0.1)';
+        }}
+        onMouseLeave={e => {
+          const el = e.currentTarget as HTMLElement;
+          el.style.transform = 'perspective(2000px) rotateY(-18deg) translateX(-10px) scaleX(0.93)';
+          el.style.boxShadow = '6px 6px 18px -2px rgba(0,0,0,0.2), 24px 28px 40px -6px rgba(0,0,0,0.1)';
         }}
       >
-        {items.map((label, i) => (
-          <Card
-            key={i}
-            label={label}
-            imgSrc={images[i % images.length]}
-            dark={dark}
-          />
-        ))}
+        <img
+          src={imgSrc}
+          alt=""
+          className="h-full w-full object-cover"
+          loading="lazy"
+          onError={e => {
+            const img = e.target as HTMLImageElement;
+            img.style.display = 'none';
+            if (img.parentElement) img.parentElement.style.background = '#2d1b69';
+          }}
+        />
+        {/* Spine light effect */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0,
+          width: 20, height: '100%',
+          marginLeft: 16,
+          borderLeft: '2px solid rgba(0,0,0,0.08)',
+          background: 'linear-gradient(90deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 100%)',
+          zIndex: 5,
+          transition: 'all 0.5s ease',
+        }} />
+        {/* Sheen */}
+        <div style={{
+          position: 'absolute', top: 0, right: 0,
+          width: '85%', height: '100%',
+          background: 'linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 100%)',
+          opacity: 0.12, zIndex: 4,
+        }} />
+        {/* Label */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.82), transparent)',
+          padding: '12px 4px 4px',
+          zIndex: 6,
+        }}>
+          <p style={{ fontSize: 8, fontWeight: 700, color: 'white', lineHeight: 1.2 }}>{label}</p>
+        </div>
       </div>
     </div>
   );
 }
 
+// ── Vertical scrolling column ──────────────────────────────────────────────
+function ScrollColumn({
+  labels, images, isBook = false, duration = 28, reverse = false,
+}: {
+  labels: string[]; images: string[]; isBook?: boolean;
+  duration?: number; reverse?: boolean;
+}) {
+  const items = [...labels, ...labels];
+  return (
+    <div style={{ overflow: 'hidden', height: '100%' }}>
+      <div style={{
+        display: 'flex', flexDirection: 'column', gap: 8,
+        animation: `scrollV${reverse ? 'Rev' : ''} ${duration}s linear infinite`,
+      }}>
+        {items.map((label, i) =>
+          isBook
+            ? <Book3DCard key={i} label={label} imgSrc={images[i % images.length]} />
+            : <MovieCard key={i} label={label} imgSrc={images[i % images.length]} />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main component ─────────────────────────────────────────────────────────
 export default function Home() {
   const leftCols = [
     { labels: MOVIE_LABELS.slice(0, 7), images: MOVIE_POSTERS.slice(0, 7), dur: 22 },
@@ -155,14 +220,13 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden" style={{ background: 'linear-gradient(180deg, #f5d0fe 0%, #e0d7ff 25%, #bfdbfe 55%, #fde8d8 80%, #fef3c7 100%)' }}>
 
-      {/* Vertical scroll keyframes injected inline */}
       <style>{`
-        @keyframes scrollVertical {
-          0% { transform: translateY(0); }
+        @keyframes scrollV {
+          0%   { transform: translateY(0); }
           100% { transform: translateY(-50%); }
         }
-        @keyframes scrollVerticalRev {
-          0% { transform: translateY(-50%); }
+        @keyframes scrollVRev {
+          0%   { transform: translateY(-50%); }
           100% { transform: translateY(0); }
         }
       `}</style>
@@ -175,44 +239,25 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative" style={{ minHeight: 560 }}>
-        {/* Left columns (movies) */}
-        <div
-          className="absolute left-0 top-0 bottom-0 flex gap-2 px-2 py-0 overflow-hidden"
-          style={{ width: 'clamp(160px, 28vw, 320px)', zIndex: 1 }}
-        >
+        {/* Left — movies */}
+        <div className="absolute left-0 top-0 bottom-0 flex gap-2 px-2 overflow-hidden"
+          style={{ width: 'clamp(160px, 28vw, 320px)', zIndex: 1 }}>
           {leftCols.map((col, i) => (
-            <ScrollColumn
-              key={i}
-              labels={col.labels}
-              images={col.images}
-              duration={col.dur}
-              reverse={col.rev}
-            />
+            <ScrollColumn key={i} labels={col.labels} images={col.images} duration={col.dur} reverse={col.rev} />
           ))}
         </div>
 
-        {/* Right columns (books) */}
-        <div
-          className="absolute right-0 top-0 bottom-0 flex gap-2 px-2 py-0 overflow-hidden"
-          style={{ width: 'clamp(160px, 28vw, 320px)', zIndex: 1 }}
-        >
+        {/* Right — 3D books */}
+        <div className="absolute right-0 top-0 bottom-0 flex gap-2 px-2 overflow-hidden"
+          style={{ width: 'clamp(160px, 28vw, 320px)', zIndex: 1 }}>
           {rightCols.map((col, i) => (
-            <ScrollColumn
-              key={i}
-              labels={col.labels}
-              images={col.images}
-              dark
-              duration={col.dur}
-              reverse={col.rev}
-            />
+            <ScrollColumn key={i} labels={col.labels} images={col.images} isBook duration={col.dur} reverse={col.rev} />
           ))}
         </div>
 
-        {/* Center hero text */}
-        <div
-          className="relative mx-auto flex flex-col items-center justify-center text-center px-4 py-24"
-          style={{ zIndex: 2, maxWidth: 520 }}
-        >
+        {/* Center */}
+        <div className="relative mx-auto flex flex-col items-center justify-center text-center px-4 py-24"
+          style={{ zIndex: 2, maxWidth: 520 }}>
           <h1 className="font-serif text-5xl sm:text-6xl leading-tight text-gray-900">
             See the true cost <br />
             <em>of your screen time</em>
@@ -233,25 +278,12 @@ export default function Home() {
         <div className="mx-auto max-w-4xl">
           <h2 className="font-serif text-4xl text-center text-gray-900 mb-2">How it works</h2>
           <p className="text-center text-gray-600 mb-10 text-sm">Three steps. No account. Your data stays in your browser.</p>
-
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
-              {
-                num: '01',
-                title: 'Mark what you watched',
-                desc: 'Pick titles from a curated catalog. One click per movie. No accounts, no setup — everything saves to your browser.',
-              },
-              {
-                num: '02',
-                title: 'See the real number',
-                desc: 'SpentHours converts runtimes into hours, days and weeks of life. The mirror is honest.',
-              },
-              {
-                num: '03',
-                title: 'Compare to what could be',
-                desc: 'Those hours, translated into books read, courses finished, skills learned. Not shame — perspective.',
-              },
-            ].map((step) => (
+              { num: '01', title: 'Mark what you watched', desc: 'Pick titles from a curated catalog. One click per movie. No accounts, no setup — everything saves to your browser.' },
+              { num: '02', title: 'See the real number', desc: 'SpentHours converts runtimes into hours, days and weeks of life. The mirror is honest.' },
+              { num: '03', title: 'Compare to what could be', desc: 'Those hours, translated into books read, courses finished, skills learned. Not shame — perspective.' },
+            ].map(step => (
               <div key={step.num} className="rounded-2xl bg-white/80 p-6 shadow-sm backdrop-blur-sm">
                 <div className="text-xs font-bold text-gray-400 mb-3">{step.num}</div>
                 <h3 className="font-serif text-lg text-gray-900 mb-2">{step.title}</h3>
@@ -271,7 +303,7 @@ export default function Home() {
               { value: '200', label: 'MOVIES WATCHED', sub: '≈ 18 full days of life' },
               { value: '12', label: 'BOOKS UNREAD', sub: 'the same hours, redirected' },
               { value: '0', label: 'ACCOUNTS NEEDED', sub: 'saved locally in your browser' },
-            ].map((stat) => (
+            ].map(stat => (
               <div key={stat.label} className="rounded-2xl bg-white/80 p-8 text-center shadow-sm backdrop-blur-sm">
                 <div className="font-display text-6xl font-black text-gray-900">{stat.value}</div>
                 <div className="mt-2 text-xs font-bold uppercase tracking-widest text-gray-500">{stat.label}</div>
@@ -299,50 +331,29 @@ export default function Home() {
           <div className="rounded-3xl bg-white/90 p-8 shadow-sm backdrop-blur-sm">
             <h3 className="font-bold text-lg text-gray-900 mb-4">A note from the author</h3>
             <div className="space-y-3 text-sm text-gray-700 leading-relaxed">
-              <p>
-                The hours we spend on screens are the quietest part of our week. We count steps, calories, sleep — but the biggest chunk of our time slips by without a number next to it. I wanted a small, honest mirror for that.
-              </p>
-              <p>
-                SpentHours is that mirror. You mark the movies and shows you've watched, and the app gently translates those hours into something tangible — books you could have read, skills you could have learned, days of life you could have lived a little differently. Not to shame anyone. Just to make the invisible visible.
-              </p>
-              <p>
-                I built this as a self-initiated project to learn, to design something I'd actually want to use, and to share a piece of myself with you. There are no accounts, no tracking, no dark patterns — your data lives in your browser, and that's it. Simple by choice.
-              </p>
-              <p>
-                If SpentHours makes you pause for even one evening and pick up something you've been putting off, that's enough for me. I'd love to hear what you think, what you'd add, and what your number turned out to be.
-              </p>
+              <p>The hours we spend on screens are the quietest part of our week. We count steps, calories, sleep — but the biggest chunk of our time slips by without a number next to it. I wanted a small, honest mirror for that.</p>
+              <p>SpentHours is that mirror. You mark the movies and shows you've watched, and the app gently translates those hours into something tangible — books you could have read, skills you could have learned, days of life you could have lived a little differently. Not to shame anyone. Just to make the invisible visible.</p>
+              <p>I built this as a self-initiated project to learn, to design something I'd actually want to use, and to share a piece of myself with you. There are no accounts, no tracking, no dark patterns — your data lives in your browser, and that's it. Simple by choice.</p>
+              <p>If SpentHours makes you pause for even one evening and pick up something you've been putting off, that's enough for me. I'd love to hear what you think, what you'd add, and what your number turned out to be.</p>
             </div>
-
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <div className="font-hand text-2xl text-gray-800 leading-tight">
-                With love,<br />Kausar
-              </div>
+              <div className="font-hand text-2xl text-gray-800 leading-tight">With love,<br />Kausar</div>
               <div className="ml-auto flex items-center gap-3">
                 <div className="text-right">
                   <div className="font-bold text-sm text-gray-900">Kausar S.</div>
                   <div className="text-xs text-gray-500">Author of SpentHours</div>
                 </div>
                 <div className="flex gap-2">
-                  <a
-                    href="https://www.linkedin.com/in/kausar-s-312a8b27a/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white transition hover:bg-blue-700"
-                  >
+                  <a href="https://www.linkedin.com/in/kausar-s-312a8b27a/" target="_blank" rel="noopener noreferrer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-white transition hover:bg-blue-700">
                     <Linkedin size={16} />
                   </a>
-                  <a
-                    href="https://github.com/KausarShangareeva"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white transition hover:bg-gray-800"
-                  >
+                  <a href="https://github.com/KausarShangareeva" target="_blank" rel="noopener noreferrer"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-900 text-white transition hover:bg-gray-800">
                     <Github size={16} />
                   </a>
-                  <a
-                    href="mailto:kausyarsh@gmail.com"
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-600"
-                  >
+                  <a href="mailto:kausyarsh@gmail.com"
+                    className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-600">
                     <Mail size={16} />
                   </a>
                 </div>
