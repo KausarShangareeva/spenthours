@@ -200,6 +200,8 @@ export default function Home() {
       <style>{`
         @keyframes scrollV    { 0% { transform:translateY(0) }    100% { transform:translateY(-50%) } }
         @keyframes scrollVRev { 0% { transform:translateY(-50%) } 100% { transform:translateY(0) } }
+        @keyframes scrollH    { 0% { transform:translateX(0) }    100% { transform:translateX(-50%) } }
+        @keyframes scrollHRev { 0% { transform:translateX(-50%) } 100% { transform:translateX(0) } }
         body { overflow-x: hidden; }
 
         .hero-cta {
@@ -249,7 +251,8 @@ export default function Home() {
         /* ── Responsive ─────────────────────────────────────────── */
         @media (max-width: 768px) {
           .hero-cols-left, .hero-cols-right { display: none !important; }
-          .hero-center { padding: 48px 20px 40px !important; }
+          .hero-section { min-height: auto !important; padding: 0 !important; }
+          .hero-center { padding: 28px 20px 28px !important; }
           .hero-h1 { font-size: 38px !important; }
           .hero-pills { gap: 8px !important; }
           .stat-pill { font-size: 11px !important; padding: 5px 10px 5px 6px !important; }
@@ -274,23 +277,28 @@ export default function Home() {
       {/* ── NAV ─────────────────────────────────────────────────────────── */}
       <nav className="nav-wrap" style={{
         position: 'relative', zIndex: 20,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
         padding: '20px 40px', maxWidth: 1280, margin: '0 auto',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <Logo size={32} />
           <span className="logo-wordmark">Spent<em>Hours</em></span>
         </div>
-        <Link to="/app">
-          <button className="hero-cta" style={{ padding: '10px 22px', fontSize: 13 }}>
-            Open app
-            <span className="hero-cta-arrow"><ArrowRight size={14} /></span>
-          </button>
-        </Link>
       </nav>
 
+      {/* Mobile TOP scroll row — movies (above headline) */}
+      <div className="mobile-scroll-row" style={{ overflow: 'hidden', padding: '0 0 16px' }}>
+        <div style={{ display: 'flex', gap: 10, width: 'max-content', animation: 'scrollH 22s linear infinite' }}>
+          {[...MOVIE_POSTERS, ...MOVIE_POSTERS].map((src, i) => (
+            <div key={i} style={{ flexShrink: 0, width: 72, height: 108, borderRadius: 10, overflow: 'hidden', background: '#111', boxShadow: '0 3px 10px rgba(0,0,0,0.25)' }}>
+              <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ── HERO ────────────────────────────────────────────────────────── */}
-      <section style={{ position: 'relative', minHeight: 620, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <section className="hero-section" style={{ position: 'relative', minHeight: 620, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ position: 'absolute', inset: 0, zIndex: 0, background: 'radial-gradient(ellipse 55% 65% at 50% 50%, rgba(255,255,255,0.72) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Left — movies */}
@@ -317,9 +325,9 @@ export default function Home() {
 
         {/* Center */}
         <div className="hero-center" style={{ position: 'relative', zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', maxWidth: 560, padding: '0 24px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: 100, padding: '5px 14px', marginBottom: 28 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#7c3aed', display: 'inline-block' }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.1em', color: '#7c3aed', textTransform: 'uppercase' }}>No account needed</span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(255,255,255,0.9)', backdropFilter: 'blur(12px)', borderRadius: 100, padding: '6px 18px 6px 8px', marginBottom: 28, boxShadow: '0 2px 12px rgba(124,58,237,0.1)' }}>
+            <Logo size={24} />
+            <span className="logo-wordmark" style={{ fontSize: 17 }}>Spent<em>Hours</em></span>
           </div>
 
           <h1 className="hero-h1" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(38px, 5.5vw, 68px)', fontWeight: 400, lineHeight: 1.08, letterSpacing: '-0.02em', color: '#1a0a2e', margin: '0 0 20px' }}>
@@ -346,16 +354,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mobile scroll row (shown only on mobile) */}
-      <div className="mobile-scroll-row" style={{ overflowX: 'auto', gap: 10, padding: '0 20px 24px', scrollbarWidth: 'none' }}>
-        {MOVIE_POSTERS.slice(0, 12).map((src, i) => (
-          <div key={i} style={{ flexShrink: 0, width: 70, height: 105, borderRadius: 8, overflow: 'hidden', background: '#111' }}>
-            <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
-          </div>
-        ))}
+
+
+      {/* Mobile bottom scroll row — books */}
+      <div className="mobile-scroll-row" style={{ overflow: 'hidden', padding: '0 0 24px' }}>
+        <div style={{ display: 'flex', gap: 10, width: 'max-content', animation: 'scrollHRev 26s linear infinite' }}>
+          {[...BOOK_COVERS, ...BOOK_COVERS].map((src, i) => (
+            <div key={i} style={{ position: 'relative', flexShrink: 0, width: 72, height: 108, borderRadius: 10, overflow: 'hidden', background: '#f5f0ff', boxShadow: '0 3px 10px rgba(0,0,0,0.15)' }}>
+              <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* ── HOW IT WORKS ──────────────────────────────────────────────────── */}
+      {/* ── HOW IT WORKS ─────────────────────────────────────────────────────────────────── */}
       <section className="section-pad" style={{ padding: '80px 24px', background: 'rgba(219,234,254,0.35)' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <p style={{ textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#7c3aed', textTransform: 'uppercase', marginBottom: 12 }}>How it works</p>
@@ -429,16 +441,16 @@ export default function Home() {
                 With love,<br />Kausar
               </div>
               <div className="author-social-row" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{ textAlign: 'right' }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: '#1a0a2e' }}>Kausar S.</div>
-                  <div style={{ fontSize: 13, color: '#9ca3af' }}>Author of SpentHours</div>
-                </div>
-                {/* Avatar */}
+                {/* Avatar LEFT of name */}
                 <img
                   src={AVATAR_URL}
                   alt="Kausar S."
                   style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', objectPosition: 'top', border: '2px solid rgba(124,58,237,0.2)', flexShrink: 0 }}
                 />
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: '#1a0a2e' }}>Kausar S.</div>
+                  <div style={{ fontSize: 13, color: '#9ca3af' }}>Author of SpentHours</div>
+                </div>
                 {/* Social icons */}
                 <div style={{ display: 'flex', gap: 8 }}>
                   {[
