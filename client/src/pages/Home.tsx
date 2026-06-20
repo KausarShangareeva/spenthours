@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { Link } from 'wouter';
 import { Linkedin, Github, Mail, ArrowRight } from 'lucide-react';
+import { ProfileModal } from '@/components/ProfileModal';
 
 // ── Book covers via Open Library numeric cover IDs (verified via API) ────
 const C = (id: string) => `https://covers.openlibrary.org/b/id/${id}-M.jpg`;
@@ -196,6 +198,7 @@ function ScrollColumn({ labels, images, isBook = false, duration = 28, reverse =
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function Home() {
+  const [showProfile, setShowProfile] = useState(false);
   // Spread 100 book covers across 3 columns so no repeats in view
   const leftCols = [
     { labels: MOVIE_LABELS.slice(0, 10), images: MOVIE_POSTERS.slice(0, 10), dur: 20 },
@@ -341,12 +344,10 @@ export default function Home() {
             Отмечайте просмотренные фильмы и сериалы в один клик. Узнайте, сколько книг вы могли бы прочесть и каким дисциплинам обучиться, если бы инвестировали это время в себя.
           </p>
 
-          <Link to="/app">
-            <button className="hero-cta">
-              See what I could achieve
-              <span className="hero-cta-arrow"><ArrowRight size={16} /></span>
-            </button>
-          </Link>
+          <button className="hero-cta" onClick={() => setShowProfile(true)}>
+            See what I could achieve
+            <span className="hero-cta-arrow"><ArrowRight size={16} /></span>
+          </button>
 
           <div className="hero-pills" style={{ display: 'flex', gap: 10, marginTop: 28, flexWrap: 'wrap', justifyContent: 'center' }}>
             <div className="stat-pill">🎬 1,000+ movies &amp; shows</div>
@@ -391,39 +392,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── STATS ─────────────────────────────────────────────────────────── */}
-      <section className="section-pad" style={{ padding: '80px 24px', background: 'rgba(196,181,253,0.2)' }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <p style={{ textAlign: 'center', fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#7c3aed', textTransform: 'uppercase', marginBottom: 12 }}>The real math</p>
-          <h2 className="section-h2" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(28px, 4vw, 44px)', textAlign: 'center', color: '#1a0a2e', margin: '0 0 8px', fontWeight: 400 }}>What 200 movies actually costs</h2>
-          <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: 48, fontSize: 16 }}>The hours are real. So is the alternative.</p>
-          <div className="section-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
-            {[
-              { value: '200', label: 'Movies watched', sub: '≈ 18 full days of life', color: '#1a0a2e' },
-              { value: '12', label: 'Books unread', sub: 'the same hours, redirected', color: '#1a0a2e' },
-              { value: '0', label: 'Accounts needed', sub: 'saved locally in your browser', color: '#1a0a2e' },
-            ].map(stat => (
-              <div key={stat.label} style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(12px)', borderRadius: 20, padding: '28px 24px', border: '1px solid rgba(255,255,255,0.9)' }}>
-                <div style={{ fontFamily: "'Odibee Sans', sans-serif", fontSize: 56, fontWeight: 900, color: stat.color, lineHeight: 1 }}>{stat.value}</div>
-                <div style={{ fontFamily: "'Instrument Serif', serif", fontSize: 18, color: '#1a0a2e', marginTop: 10, fontWeight: 400 }}>{stat.label}</div>
-                <div style={{ fontSize: 16, color: '#6b7280', marginTop: 4 }}>{stat.sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* ── CTA BANNER ────────────────────────────────────────────────────── */}
       <section className="section-pad" style={{ padding: '80px 24px', textAlign: 'center', background: 'rgba(186,230,253,0.3)' }}>
         <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', color: '#7c3aed', textTransform: 'uppercase', marginBottom: 16 }}>Ready?</p>
         <h2 className="section-h2" style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(28px, 4vw, 44px)', color: '#1a0a2e', margin: '0 0 12px', fontWeight: 400 }}>Ready to see your number?</h2>
         <p style={{ color: '#6b7280', marginBottom: 36, fontSize: 16 }}>Takes 30 seconds. No sign-up, no email — just you and the math.</p>
-        <Link to="/app">
-          <button className="hero-cta">
-            Start analyzing wasted hours
-            <span className="hero-cta-arrow"><ArrowRight size={16} /></span>
-          </button>
-        </Link>
+        <button className="hero-cta" onClick={() => setShowProfile(true)}>
+          Start analyzing wasted hours
+          <span className="hero-cta-arrow"><ArrowRight size={16} /></span>
+        </button>
       </section>
 
       {/* ── AUTHOR NOTE ───────────────────────────────────────────────────── */}
@@ -431,11 +410,36 @@ export default function Home() {
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <div className="author-card" style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(16px)', borderRadius: 28, padding: '40px 40px', border: '1px solid rgba(255,255,255,0.95)', boxShadow: '0 8px 40px rgba(26,10,46,0.07)' }}>
             <h3 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22, color: '#1a0a2e', marginBottom: 20, fontWeight: 400 }}>A note from the author</h3>
-            <div style={{ fontSize: 16, color: '#4b5563', lineHeight: 1.75 }}>
-              <p style={{ margin: '0 0 14px' }}>The hours we spend on screens are the quietest part of our week. We count steps, calories, sleep — but the biggest chunk of our time slips by without a number next to it. I wanted a small, honest mirror for that.</p>
-              <p style={{ margin: '0 0 14px' }}>SpentHours is that mirror. You mark the movies and shows you've watched, and the app gently translates those hours into something tangible — books you could have read, skills you could have learned, days of life you could have lived a little differently. Not to shame anyone. Just to make the invisible visible.</p>
-              <p style={{ margin: '0 0 14px' }}>I built this as a self-initiated project to learn, to design something I'd actually want to use, and to share a piece of myself with you. There are no accounts, no tracking, no dark patterns — your data lives in your browser, and that's it. Simple by choice.</p>
-              <p style={{ margin: 0 }}>If SpentHours makes you pause for even one evening and pick up something you've been putting off, that's enough for me.</p>
+            <div style={{ fontSize: 16, color: '#4b5563', lineHeight: 1.9 }}>
+              <p style={{ margin: '0 0 16px' }}>
+                The hours we spend on screens are{' '}
+                <mark style={{ background: '#fde68a', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#92400e' }}>the quietest part of our week</mark>.
+                {' '}We count steps, calories, sleep — but{' '}
+                <span style={{ textDecoration: 'underline', textDecorationColor: '#a78bfa', textDecorationThickness: 2 }}>the biggest chunk of our time</span>{' '}
+                slips by without a number next to it. I wanted a{' '}
+                <mark style={{ background: '#bbf7d0', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#065f46' }}>small, honest mirror</mark>{' '}for that.
+              </p>
+              <p style={{ margin: '0 0 16px' }}>
+                SpentHours is that mirror. You mark the movies and shows you’ve watched, and the app gently translates those hours into something tangible —{' '}
+                <mark style={{ background: '#bfdbfe', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#1e40af' }}>books you could have read</mark>,{' '}
+                <mark style={{ background: '#bfdbfe', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#1e40af' }}>skills you could have learned</mark>,{' '}
+                <mark style={{ background: '#bfdbfe', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#1e40af' }}>days of life lived a little differently</mark>.
+                {' '}Not to shame anyone. Just to{' '}
+                <span style={{ textDecoration: 'underline', textDecorationStyle: 'wavy', textDecorationColor: '#f87171', textDecorationThickness: 2, fontStyle: 'italic' }}>make the invisible visible</span>.
+              </p>
+              <p style={{ margin: '0 0 16px' }}>
+                I built this as a self-initiated project to learn, to design something I’d actually want to use, and to share a piece of myself with you.
+                {' '}There are{' '}
+                <mark style={{ background: '#d1fae5', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#065f46' }}>no accounts, no tracking, no dark patterns</mark>{' '}
+                — your data lives in your browser, and that’s it.{' '}
+                <span style={{ fontWeight: 700, color: '#1a0a2e', textDecoration: 'underline', textDecorationColor: '#1a0a2e', textDecorationThickness: 2 }}>Simple by choice.</span>
+              </p>
+              <p style={{ margin: 0 }}>
+                If SpentHours makes you{' '}
+                <span style={{ textDecoration: 'underline', textDecorationStyle: 'dashed', textDecorationColor: '#a78bfa', textDecorationThickness: 2 }}>pause for even one evening</span>{' '}
+                and pick up something you’ve been putting off,{' '}
+                <mark style={{ background: '#fce7f3', padding: '1px 4px', borderRadius: 3, fontWeight: 600, color: '#9d174d' }}>that’s enough for me</mark>.
+              </p>
             </div>
 
             <div className="author-bottom" style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
@@ -473,6 +477,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {showProfile && <ProfileModal onClose={() => setShowProfile(false)} />}
     </div>
   );
 }
