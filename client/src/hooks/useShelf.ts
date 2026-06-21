@@ -45,6 +45,14 @@ export function useShelf() {
     });
   }, []);
 
+  const patchShelf = useCallback((movieId: string, patch: Partial<ShelfItem>) => {
+    setShelf(prev => {
+      const updated = prev.map(i => (i.movie_id === movieId ? { ...i, ...patch } : i));
+      saveShelf(updated);
+      return updated;
+    });
+  }, []);
+
   const removeFromShelf = useCallback((movieId: string) => {
     setShelf(prev => {
       const updated = prev.filter(i => i.movie_id !== movieId);
@@ -68,6 +76,7 @@ export function useShelf() {
     watchedIds,
     addToShelf,
     removeFromShelf,
+    patchShelf,
     toggleShelf,
     totalMinutes,
     count: shelf.length,
