@@ -1,0 +1,62 @@
+/* ── Landing page animations & utility classes ──────────────────────────── */
+@keyframes scrollV { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+@keyframes scrollVRev { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
+@keyframes scrollH { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes scrollHRev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+
+body { overflow-x: hidden; }
+
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--ink); color: #fff; border: none; border-radius: var(--r-pill);
+  padding: 16px 32px; font-size: 15px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.18s cubic-bezier(0.23, 1, 0.32, 1), background 0.18s;
+  box-shadow: 0 4px 24px rgba(26, 10, 46, 0.25), 0 1px 4px rgba(26, 10, 46, 0.12);
+}
+.hero-cta:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 8px 32px rgba(26, 10, 46, 0.32); background: #2d1b4e; }
+.hero-cta:active { transform: scale(0.97); }
+.hero-cta-arrow {
+  display: flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+  border-radius: 50%; background: rgba(255, 255, 255, 0.15); transition: transform 0.18s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.hero-cta:hover .hero-cta-arrow { transform: translateX(3px); }
+
+.stat-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255, 255, 255, 0.55); border: 1px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px); border-radius: var(--r-pill);
+  padding: 6px 14px 6px 8px; font-size: 13px; font-weight: 600; color: #3b1f6e;
+}
+
+.fade-left { -webkit-mask-image: linear-gradient(to right, transparent 0%, black 18%, black 100%); mask-image: linear-gradient(to right, transparent 0%, black 18%, black 100%); }
+.fade-right { -webkit-mask-image: linear-gradient(to left, transparent 0%, black 18%, black 100%); mask-image: linear-gradient(to left, transparent 0%, black 18%, black 100%); }
+.fade-top-bottom { -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%); }
+
+.logo-wordmark { font-family: var(--font-serif); font-size: 22px; font-weight: 400; letter-spacing: -0.02em; color: var(--ink); line-height: 1; }
+.logo-wordmark em { font-style: italic; color: var(--brand); }
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero-cols-left, .hero-cols-right { display: none !important; }
+  .hero-section { min-height: auto !important; padding: 0 !important; }
+  .hero-center { padding: 28px 20px 28px !important; }
+  .hero-h1 { font-size: 28px !important; white-space: normal !important; }
+  .hero-pills { gap: 8px !important; }
+  .stat-pill { font-size: 11px !important; padding: 5px 10px 5px 6px !important; }
+  .section-grid-3 { grid-template-columns: 1fr !important; }
+  .section-pad { padding: 56px 20px !important; }
+  .author-card { padding: 28px 20px !important; }
+  .author-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 16px !important; }
+  .author-social-row { margin-left: 0 !important; }
+  .hero-cta { padding: 14px 24px !important; font-size: 14px !important; }
+  .mobile-scroll-row { display: flex !important; }
+}
+@media (min-width: 769px) {
+  .mobile-scroll-row { display: none !important; }
+}
+@media (max-width: 1180px) and (min-width: 769px) { .hero-col-3 { display: none !important; } }
+@media (max-width: 980px) and (min-width: 769px) { .hero-col-2 { display: none !important; } }
+@media (max-width: 480px) {
+  .hero-h1 { font-size: 30px !important; }
+  .section-h2 { font-size: 26px !important; }
+}
