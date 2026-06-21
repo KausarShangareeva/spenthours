@@ -26,7 +26,7 @@ export function AnalyticsDialog({ totalMinutes, onClose }: { totalMinutes: numbe
   const cards = HOBBIES.filter(x => picked.has(x.id));
 
   return (
-    <Modal onClose={onClose} maxWidth={1000}>
+    <Modal onClose={onClose} maxWidth={1140}>
       <header className={s.header}>
         <p className={s.eyebrow}>✨ Your time, translated</p>
         <div className={s.bigRow}>
