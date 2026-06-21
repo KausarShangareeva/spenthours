@@ -1,0 +1,22 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  border-radius: var(--r-pill);
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+.btn:disabled { opacity: 0.5; cursor: default; }
+
+.primary { background: var(--brand); color: #fff; }
+.primary:not(:disabled):hover { transform: translateY(-1px) scale(1.03); box-shadow: var(--shadow-brand); }
+
+.dark { background: var(--ink); color: #fff; }
+.dark:hover { transform: translateY(-1px); }
+
+.ghost { background: #fff; color: #374151; border: 1px solid #e5e7eb; }
+.ghost:hover { background: #faf9ff; }
