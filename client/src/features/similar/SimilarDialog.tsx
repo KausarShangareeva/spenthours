@@ -29,13 +29,16 @@ export function SimilarDialog({ item, watchedIds, onMark, onClose }: Props) {
   const markAll = () => { visible.forEach(onMark); toast.success(`Added ${visible.length} to your shelf`); onClose(); };
   const markSelected = () => { visible.filter(x => selected.has(x.id)).forEach(onMark); toast.success(`Added ${selected.size} to your shelf`); onClose(); };
   const suggestMore = async () => {
+    // keep what's already selected — just load a fresh batch
     if (!hasMore) { toast('No more titles like this'); return; }
-    try { await more(); setSelected(new Set()); toast.success('More like this'); }
+    try { await more(); toast.success('More like this'); }
     catch { toast('Could not load more'); }
   };
+  // closing keeps your picks: anything you tapped is saved to the shelf
+  const dismiss = () => { visible.filter(x => selected.has(x.id)).forEach(onMark); onClose(); };
 
   return (
-    <Modal onClose={onClose} maxWidth={980} showClose={false}>
+    <Modal onClose={dismiss} maxWidth={980} showClose={false}>
       <header className={s.header}>
         <PillButton variant="primary" onClick={markAll} disabled={!visible.length}>
           <CheckCheck size={15} />Mark all ({visible.length})
@@ -48,7 +51,7 @@ export function SimilarDialog({ item, watchedIds, onMark, onClose }: Props) {
         <PillButton variant="ghost" onClick={suggestMore}>
           <Shuffle size={14} />Suggest similar
         </PillButton>
-        <button className={s.close} onClick={onClose} aria-label="Close"><X size={16} /></button>
+        <button className={s.close} onClick={dismiss} aria-label="Close"><X size={16} /></button>
       </header>
 
       <div className={s.titleBlock}>
