@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./styles/tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -43,6 +44,7 @@
   --butter: #fff3b0;
   --mint: #c8f5d0;
   --sky: #c0e8ff;
+  /* brand / page tokens live in styles/tokens.css */
 
   --primary: #c084fc;
   --primary-foreground: #1a0a2e;

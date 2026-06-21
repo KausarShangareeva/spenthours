@@ -1,0 +1,38 @@
+/* ── Design tokens — single source of truth for colours, radii, shadows, type ── */
+:root {
+  /* brand accent — change this one value to recolour the whole site */
+  --brand: #7c3aed;
+  --brand-strong: #6d28d9;
+  --brand-soft: rgba(124, 58, 237, 0.35);
+
+  /* surfaces */
+  --page-bg: #f0e8ff;
+  --surface: #ffffff;
+  --surface-2: #faf9ff;
+  --overlay: rgba(15, 10, 30, 0.7);
+
+  /* text */
+  --ink: #1a0a2e;
+  --muted: #6b7280;
+  --muted-2: #9ca3af;
+
+  /* lines */
+  --line: #f3f4f6;
+  --line-2: #efeafc;
+
+  /* radii */
+  --r-pill: 100px;
+  --r-card: 16px;
+  --r-modal: 24px;
+
+  /* shadows */
+  --shadow-card: 0 2px 8px rgba(26, 10, 46, 0.10);
+  --shadow-pop: 0 32px 100px rgba(0, 0, 0, 0.35);
+  --shadow-brand: 0 6px 20px var(--brand-soft), 0 2px 6px rgba(124, 58, 237, 0.25);
+
+  /* type */
+  --font-sans: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', serif;
+  --font-display: 'Odibee Sans', sans-serif;
+  --font-hand: 'Kalam', cursive;
+}
